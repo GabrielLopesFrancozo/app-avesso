@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  main {
+    flex: 1;
+  }
+
+  .navbar {
+    padding: 0;
+  }
+  
+  .navbar-nav {
+    flex-direction: row;
+  }
+  
+  .nav-link {
+    padding: 10px;
+    font-size: 14px;
+  }
