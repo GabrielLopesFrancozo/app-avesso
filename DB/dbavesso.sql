@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06-Out-2024 às 22:07
--- Versão do servidor: 10.4.27-MariaDB
--- versão do PHP: 8.2.0
+-- Tempo de geração: 17/10/2024 às 14:25
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -26,7 +26,7 @@ USE `dbavesso`;
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbhashtags`
+-- Estrutura para tabela `tbhashtags`
 --
 
 CREATE TABLE `tbhashtags` (
@@ -37,7 +37,7 @@ CREATE TABLE `tbhashtags` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tblikes`
+-- Estrutura para tabela `tblikes`
 --
 
 CREATE TABLE `tblikes` (
@@ -49,7 +49,7 @@ CREATE TABLE `tblikes` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbmatches`
+-- Estrutura para tabela `tbmatches`
 --
 
 CREATE TABLE `tbmatches` (
@@ -62,7 +62,7 @@ CREATE TABLE `tbmatches` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbmensagens`
+-- Estrutura para tabela `tbmensagens`
 --
 
 CREATE TABLE `tbmensagens` (
@@ -76,7 +76,7 @@ CREATE TABLE `tbmensagens` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbpaises`
+-- Estrutura para tabela `tbpaises`
 --
 
 CREATE TABLE `tbpaises` (
@@ -87,7 +87,7 @@ CREATE TABLE `tbpaises` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbperguntas`
+-- Estrutura para tabela `tbperguntas`
 --
 
 CREATE TABLE `tbperguntas` (
@@ -98,13 +98,12 @@ CREATE TABLE `tbperguntas` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbusuarios`
+-- Estrutura para tabela `tbusuarios`
 --
 
 CREATE TABLE `tbusuarios` (
   `idUsuario` int(11) NOT NULL,
   `emailUsuario` varchar(100) NOT NULL,
-  `telefoneUsuario` varchar(50) DEFAULT NULL,
   `senhaUsuario` varchar(64) NOT NULL,
   `nomeUsuario` varchar(100) NOT NULL,
   `sobrenomeUsuario` varchar(100) NOT NULL,
@@ -117,10 +116,18 @@ CREATE TABLE `tbusuarios` (
   `fotoPerfilUsuario` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `tbusuarios`
+--
+
+INSERT INTO `tbusuarios` (`idUsuario`, `emailUsuario`, `senhaUsuario`, `nomeUsuario`, `sobrenomeUsuario`, `dataNascUsuario`, `idPais`, `bioUsuario`, `sexualidadeUsuario`, `generoUsuario`, `preferenciaUsuario`, `fotoPerfilUsuario`) VALUES
+(1, 'gabriel.lopes.francozo.2023@gmail.com', '1234', 'Gabriel', 'Lopes Françozo', NULL, NULL, NULL, 'Hétero', 'Masculino', 'Homem', NULL),
+(2, 'marcos@email.com', '1234', 'Marcos', 'de Melo', NULL, NULL, NULL, 'Hétero', 'Masculino', 'Homem', '2.jpg');
+
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tbusuario_responde_pergunta`
+-- Estrutura para tabela `tbusuario_responde_pergunta`
 --
 
 CREATE TABLE `tbusuario_responde_pergunta` (
@@ -134,19 +141,19 @@ CREATE TABLE `tbusuario_responde_pergunta` (
 --
 
 --
--- Índices para tabela `tbhashtags`
+-- Índices de tabela `tbhashtags`
 --
 ALTER TABLE `tbhashtags`
   ADD KEY `usuario_id_fk` (`idUsuario`);
 
 --
--- Índices para tabela `tblikes`
+-- Índices de tabela `tblikes`
 --
 ALTER TABLE `tblikes`
   ADD KEY `usuarioLike_id_fk` (`idUsuario`);
 
 --
--- Índices para tabela `tbmatches`
+-- Índices de tabela `tbmatches`
 --
 ALTER TABLE `tbmatches`
   ADD PRIMARY KEY (`idMatche`),
@@ -154,40 +161,40 @@ ALTER TABLE `tbmatches`
   ADD KEY `usuario_id5_fk` (`idUsuario2`);
 
 --
--- Índices para tabela `tbmensagens`
+-- Índices de tabela `tbmensagens`
 --
 ALTER TABLE `tbmensagens`
   ADD KEY `remetente_id_fk` (`idRemetente`),
   ADD KEY `destinatario_id_fk` (`idDestinatario`);
 
 --
--- Índices para tabela `tbpaises`
+-- Índices de tabela `tbpaises`
 --
 ALTER TABLE `tbpaises`
   ADD PRIMARY KEY (`idPais`);
 
 --
--- Índices para tabela `tbperguntas`
+-- Índices de tabela `tbperguntas`
 --
 ALTER TABLE `tbperguntas`
   ADD PRIMARY KEY (`idPergunta`);
 
 --
--- Índices para tabela `tbusuarios`
+-- Índices de tabela `tbusuarios`
 --
 ALTER TABLE `tbusuarios`
   ADD PRIMARY KEY (`idUsuario`),
   ADD KEY `pais_id_fk` (`idPais`);
 
 --
--- Índices para tabela `tbusuario_responde_pergunta`
+-- Índices de tabela `tbusuario_responde_pergunta`
 --
 ALTER TABLE `tbusuario_responde_pergunta`
   ADD KEY `usuario2_id_fk` (`idUsuario`),
   ADD KEY `pergunta_id_fk` (`idPergunta`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
@@ -212,47 +219,47 @@ ALTER TABLE `tbperguntas`
 -- AUTO_INCREMENT de tabela `tbusuarios`
 --
 ALTER TABLE `tbusuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Restrições para despejos de tabelas
+-- Restrições para tabelas despejadas
 --
 
 --
--- Limitadores para a tabela `tbhashtags`
+-- Restrições para tabelas `tbhashtags`
 --
 ALTER TABLE `tbhashtags`
   ADD CONSTRAINT `usuario_id_fk` FOREIGN KEY (`idUsuario`) REFERENCES `tbusuarios` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Limitadores para a tabela `tblikes`
+-- Restrições para tabelas `tblikes`
 --
 ALTER TABLE `tblikes`
   ADD CONSTRAINT `usuarioLike_id_fk` FOREIGN KEY (`idUsuario`) REFERENCES `tbusuarios` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuario_id3_fk` FOREIGN KEY (`idUsuario`) REFERENCES `tbusuarios` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Limitadores para a tabela `tbmatches`
+-- Restrições para tabelas `tbmatches`
 --
 ALTER TABLE `tbmatches`
   ADD CONSTRAINT `usuario_id4_fk` FOREIGN KEY (`idUsuario1`) REFERENCES `tbusuarios` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuario_id5_fk` FOREIGN KEY (`idUsuario2`) REFERENCES `tbusuarios` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Limitadores para a tabela `tbmensagens`
+-- Restrições para tabelas `tbmensagens`
 --
 ALTER TABLE `tbmensagens`
   ADD CONSTRAINT `destinatario_id_fk` FOREIGN KEY (`idDestinatario`) REFERENCES `tbusuarios` (`idUsuario`),
   ADD CONSTRAINT `remetente_id_fk` FOREIGN KEY (`idRemetente`) REFERENCES `tbusuarios` (`idUsuario`);
 
 --
--- Limitadores para a tabela `tbusuarios`
+-- Restrições para tabelas `tbusuarios`
 --
 ALTER TABLE `tbusuarios`
   ADD CONSTRAINT `pais_id_fk` FOREIGN KEY (`idPais`) REFERENCES `tbpaises` (`idPais`);
 
 --
--- Limitadores para a tabela `tbusuario_responde_pergunta`
+-- Restrições para tabelas `tbusuario_responde_pergunta`
 --
 ALTER TABLE `tbusuario_responde_pergunta`
   ADD CONSTRAINT `pergunta_id_fk` FOREIGN KEY (`idPergunta`) REFERENCES `tbperguntas` (`idPergunta`),

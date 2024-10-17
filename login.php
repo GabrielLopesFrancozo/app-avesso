@@ -1,41 +1,56 @@
 <?php
-    include("db/conexao.php");
+include("db/conexao.php");
 
-    if (isset($_POST["email-tel"]) && isset($_POST["senha"])) {
-        $email_tel = $_POST["email-tel"];
-        $senha = $_POST["senha"];
+if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
+    $emailUsuario = $_POST["email"];
+    $senhaUsuario = $_POST["senhaUsuario"];
 
-        $sql = "SELECT emailUsuario, telefoneUsuario, senhaUsuario FROM tbusuarios WHERE (emailUsuario = '$email_tel' OR telefoneUsuario = '$email_tel') AND senhaUsuario = '$senha'";
-        $result = mysqli_query($conexao, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            if ($email_tel == $row["emailUsuario"] || $email_tel == $row["telefoneUsuario"]) {
-                session_start();
-                $_SESSION["email_tel"] = $email_tel;
-                header("Location: index.php");
-            } else {
-                echo "Email, telefone ou senha incorretos";
-            }
+    $sql = "SELECT nomeUsuario, emailUsuario, senhaUsuario FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
+    $result = mysqli_query($conexao, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        if ($emailUsuario == $row["emailUsuario"]) {
+            session_start();
+            $_SESSION["emailUsuario"] = $emailUsuario;
+            $_SESSION["senhaUsuario"] = $senhaUsuario;
+            $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
+            header("Location: index.php");
         } else {
             echo "Email, telefone ou senha incorretos";
         }
+    } else {
+        echo "Email, telefone ou senha incorretos";
     }
+}
 ?>
 
-<h1>Login</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<form action="login.php" method="post">
-    <label for="email-tel">Email ou telefone:</label>
-    <input type="text" name="email-tel" id="email-tel" required>
-    <br>
-    <label for="senha">Senha:</label>
-    <input type="password" name="senha" id="senha" required>
-    <br>
-    <input type="submit" value="Entrar">
-</form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Avesso</title>
+</head>
 
-<label for="ou">- Ou -</label><br>
+<body>
+    <h1>Login</h1>
 
-<button>Entrar com Google</button><br>
+    <form action="login.php" method="post">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" required>
+        <br>
+        <label for="senhaUsuario">Senha:</label>
+        <input type="password" name="senhaUsuario" id="senhaUsuario" required>
+        <br>
+        <input type="submit" value="Entrar">
+    </form>
 
-<label for="conta">Não tem uma conta?<a href="cadastro.php">Cadastre-se</a></label>
+    <label for="ou">- Ou -</label><br>
+
+    <button>Entrar com Google</button><br>
+
+    <label for="conta">Não tem uma conta?<a href="cadastro.php">Cadastre-se</a></label>
+</body>
+
+</html>

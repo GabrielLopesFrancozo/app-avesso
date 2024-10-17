@@ -2,6 +2,8 @@
 
 include("db/conexao.php");
 
+session_start();
+
 if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST["senha"]) && isset($_POST["confirmar-senha"])) {
 
     $nomeCompleto = $_POST["nome-completo"];
@@ -29,18 +31,24 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
         echo "Senhas diferentes";
     } else {
 
-        $sql = "SELECT emailUsuario, telefoneUsuario FROM tbusuarios WHERE emailUsuario = '$email' OR telefoneUsuario = '$telefone'";
+        $sql = "SELECT emailUsuario FROM tbusuarios WHERE emailUsuario = '$email'";
         $result = mysqli_query($conexao, $sql);
 
         if (mysqli_num_rows($result) > 0) {
             echo "Email ou telefone ja existente";
         } else {
 
-            $sql = "INSERT INTO tbusuarios (nomeUsuario, sobrenomeUsuario, emailUsuario, telefoneUsuario, senhaUsuario) VALUES ('$nome', '$sobrenome', '$email', '$telefone', '$senha')";
+            $sql = "INSERT INTO tbusuarios (nomeUsuario, sobrenomeUsuario, emailUsuario, senhaUsuario) VALUES ('$nome', '$sobrenome', '$email', '$senha')";
             $result = mysqli_query($conexao, $sql);
 
+            $sql = "SELECT idUsuario FROM tbusuarios WHERE emailUsuario = '$email' AND senhaUsuario = '$senha'";
+            $result = mysqli_query($conexao, $sql);
+            $row = mysqli_fetch_assoc($result);
+
+            $_SESSION["idUsuario"] = $row["idUsuario"];
+
             if ($result) {
-                header("Location: index.php");
+                header("Location: cadastro2.php");
             } else {
                 echo "Erro ao cadastrar";
             }
@@ -50,32 +58,42 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
 
 ?>
 
-<h1>Cadastro</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<form action="cadastro.php" method="post">
-    <label for="email-tel">Email ou telefone:</label>
-    <input type="text" name="email-tel" id="email-tel" required>
-    <br>
-    <label for="nome-complet">Nome completo:</label>
-    <input type="text" name="nome-completo" id="nome-completo" required>
-    <br>
-    <label for="senha">Senha:</label>
-    <input type="password" name="senha" id="senha" required>
-    <br>
-    <label for="confirmar-senha">Confirme sua senha:</label>
-    <input type="password" name="confirmar-senha" id="confirmar-senha" required>
-    <br>
-    <label for="confirmar-senha">Aceito os <a href="./termosECondicoes.php">termos e condições</a>:</label>
-    <input type="checkbox" name="confirmar-senha" id="confirmar-senha" required>
-    <br>
-    <input type="submit" value="Entrar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | Avesso</title>
+</head>
 
-    <label for="file">Selecione um arquivo:</label>
-    <input type="file" name="file" id="file">
-</form>
+<body>
+    <h1>Cadastro</h1>
 
-<label for="ou">- Ou -</label><br>
+    <form action="cadastro.php" method="post">
+        <label for="email-tel">Email ou telefone:</label>
+        <input type="text" name="email-tel" id="email-tel" required>
+        <br>
+        <label for="nome-complet">Nome completo:</label>
+        <input type="text" name="nome-completo" id="nome-completo" required>
+        <br>
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha" id="senha" required>
+        <br>
+        <label for="confirmar-senha">Confirme sua senha:</label>
+        <input type="password" name="confirmar-senha" id="confirmar-senha" required>
+        <br>
+        <label for="termos">Aceito os <a href="./termosECondicoes.php">termos e condições</a>:</label>
+        <input type="checkbox" name="termos" id="termos" required>
+        <br>
+        <input type="submit" value="Cadastrar">
+    </form>
 
-<button>Entrar com Google</button><br>
+    <label for="ou">- Ou -</label><br>
 
-<label for="conta">Já tem uma conta?<a href="login.php">Logue-se</a></label>
+    <button>Entrar com Google</button><br>
+
+    <label for="conta">Já tem uma conta?<a href="login.php">Logue-se</a></label>
+</body>
+
+</html>

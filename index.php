@@ -1,6 +1,13 @@
-<!-- <?php
-        include("./db/conexao.php");
-        ?> -->
+<?php
+    include("./db/conexao.php");
+
+    session_start();
+
+    if (!isset($_SESSION["emailUsuario"]) && !isset($_SESSION["senhaUsuario"])) {
+        header("Location: login.php");
+    }
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -39,6 +46,12 @@
                 </li>
                 <li class="nav-item">
                     <a id="sidebar-link" class="nav-link" href="index.php?menu=profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a id="sidebar-link" class="nav-link" href="logout.php">Sair</a>
+                </li>
+                <li class="nav-item">
+                    <a id="sidebar-link" class="nav-link" href="#"><?php echo $_SESSION["nomeUsuario"]; ?></a>
                 </li>
             </ul>
         </div>
