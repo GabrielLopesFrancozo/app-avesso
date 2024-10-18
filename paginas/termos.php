@@ -57,7 +57,7 @@
     <h2>Contato</h2>
     <p>Se você tiver qualquer dúvida sobre estes Termos e Condições, por favor, entre em contato conosco em [Seu e-mail de contato].</p>
     
-    <a href="./cadastro.php" class="btn btn-primary">Fechar</a>
+    <a href="./cadastro/cadastro.php" class="btn btn-primary">Fechar</a>
 </div>
 
 

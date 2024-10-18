@@ -1,5 +1,5 @@
 <?php
-    include("db/conexao.php");
+    include("../../db/conexao.php");
    
     session_start();
 
@@ -34,7 +34,7 @@
         }
         ?>
         <div class="mb-3">
-            <img id="foto-usuario" class="img-fluid img-thumbnail" width="200" src="./img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do Usuário">
+            <img id="foto-usuario" class="img-fluid img-thumbnail" width="200" src="../../img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do Usuário">
         </div>
 
         <div class="mb-3">

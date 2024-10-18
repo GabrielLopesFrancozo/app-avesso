@@ -1,10 +1,10 @@
 <?php
 
-include("db/conexao.php");
+include("../../db/conexao.php");
 
 session_start();
 
-if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST["senha"]) && isset($_POST["confirmar-senha"])) {
+if (isset($_POST["nome-completo"]) && isset($_POST["email"]) && isset($_POST["senha"]) && isset($_POST["confirmar-senha"])) {
 
     $nomeCompleto = $_POST["nome-completo"];
     $nomesIndividuais = explode(" ", $nomeCompleto);
@@ -17,13 +17,7 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
         $sobrenome = "";
     }
 
-    $email = strpos($_POST["email-tel"], "@") ? $_POST["email-tel"] : "";
-    if ($email == "") {
-        $telefone = $_POST["email-tel"];
-    } else {
-        $telefone = "";
-    }
-
+    $email = $_POST["email"];
     $senha = $_POST["senha"];
     $senhaConfirmada = $_POST["confirmar-senha"];
 
@@ -34,10 +28,10 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
         $sql = "SELECT emailUsuario FROM tbusuarios WHERE emailUsuario = '$email'";
         $result = mysqli_query($conexao, $sql);
 
+        //verifica se o usuário já tem cadastro
         if (mysqli_num_rows($result) > 0) {
-            echo "Email ou telefone ja existente";
+            echo "Usuário já cadastrado";
         } else {
-
             $sql = "INSERT INTO tbusuarios (nomeUsuario, sobrenomeUsuario, emailUsuario, senhaUsuario) VALUES ('$nome', '$sobrenome', '$email', '$senha')";
             $result = mysqli_query($conexao, $sql);
 
@@ -71,8 +65,8 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
     <h1>Cadastro</h1>
 
     <form action="cadastro.php" method="post">
-        <label for="email-tel">Email ou telefone:</label>
-        <input type="text" name="email-tel" id="email-tel" required>
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" required>
         <br>
         <label for="nome-complet">Nome completo:</label>
         <input type="text" name="nome-completo" id="nome-completo" required>
@@ -83,7 +77,7 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
         <label for="confirmar-senha">Confirme sua senha:</label>
         <input type="password" name="confirmar-senha" id="confirmar-senha" required>
         <br>
-        <label for="termos">Aceito os <a href="./termos.php">termos e condições</a>:</label>
+        <label for="termos">Aceito os <a href="../termos.php">termos e condições</a>:</label>
         <input type="checkbox" name="termos" id="termos" required>
         <br>
         <input type="submit" value="Cadastrar">

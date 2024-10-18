@@ -9,15 +9,26 @@ if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
     $result = mysqli_query($conexao, $sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        if ($emailUsuario == $row["emailUsuario"]) {
+
+        if($row["fotoPerfilUsuario"] == null){
             session_start();
             $_SESSION["emailUsuario"] = $emailUsuario;
             $_SESSION["senhaUsuario"] = $senhaUsuario;
             $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
-            header("Location: ./../../index.php");
-        } else {
-            echo "Email, telefone ou senha incorretos";
+            $_SESSION["idUsuario"] = $row["idUsuario"];
+            header("Location: ./cadastro2.php");
+        } else{
+            if ($emailUsuario == $row["emailUsuario"]) {
+                session_start();
+                $_SESSION["emailUsuario"] = $emailUsuario;
+                $_SESSION["senhaUsuario"] = $senhaUsuario;
+                $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
+                header("Location: ./../../index.php");
+            } else {
+                echo "Email, telefone ou senha incorretos";
+            }
         }
+
     } else {
         echo "Email, telefone ou senha incorretos";
     }

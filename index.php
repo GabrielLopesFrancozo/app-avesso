@@ -50,22 +50,22 @@ if (isset($_GET["menu"])) {
         <div id="sidebar" class="navbar bg-light align-items-start border-2 border-end" style="width: 200px;">
             <ul class="navbar-nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="index.php?menu=principal">Principal</a>
+                    <a class="nav-link <?php if ($menu == "principal") echo "active"; ?>" aria-current="page" href="index.php?menu=principal">Principal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?menu=conversas">Conversas</a>
+                    <a class="nav-link <?php if ($menu == "conversas") echo "active"; ?>" href="index.php?menu=conversas">Conversas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?menu=pesquisar">Pesquisar</a>
+                    <a class="nav-link <?php if ($menu == "pesquisar") echo "active"; ?>" href="index.php?menu=pesquisar">Pesquisar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?menu=perfil">Perfil</a>
+                    <a class="nav-link <?php if ($menu == "perfil") echo "active"; ?>" href="index.php?menu=perfil">Perfil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?menu=configuracoes">Configurações</a>
+                    <a class="nav-link <?php if ($menu == "configuracoes") echo "active"; ?>" href="index.php?menu=configuracoes">Configurações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?menu=sair">Sair</a>
+                    <a class="nav-link <?php if ($menu == "sair") echo "active"; ?>" href="index.php?menu=sair">Sair</a>
                 </li>
             </ul>
         </div>
