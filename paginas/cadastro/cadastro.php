@@ -83,7 +83,7 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email-tel"]) && isset($_POST
         <label for="confirmar-senha">Confirme sua senha:</label>
         <input type="password" name="confirmar-senha" id="confirmar-senha" required>
         <br>
-        <label for="termos">Aceito os <a href="./termosECondicoes.php">termos e condições</a>:</label>
+        <label for="termos">Aceito os <a href="./termos.php">termos e condições</a>:</label>
         <input type="checkbox" name="termos" id="termos" required>
         <br>
         <input type="submit" value="Cadastrar">

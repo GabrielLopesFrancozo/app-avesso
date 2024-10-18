@@ -1,5 +1,5 @@
 <?php
-include("db/conexao.php");
+include("../../db/conexao.php");
 
 if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
     $emailUsuario = $_POST["email"];
@@ -14,7 +14,7 @@ if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
             $_SESSION["emailUsuario"] = $emailUsuario;
             $_SESSION["senhaUsuario"] = $senhaUsuario;
             $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
-            header("Location: index.php");
+            header("Location: ./../../index.php");
         } else {
             echo "Email, telefone ou senha incorretos";
         }
