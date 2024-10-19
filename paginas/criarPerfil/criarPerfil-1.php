@@ -11,7 +11,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -27,7 +27,7 @@
     <h2><?= $dados["nomeUsuario"] ?></h2>
     <div class="col-12">
         <?php
-        if ($dados["fotoPerfilUsuario"] == "" || !file_exists('./img/fotos-usuarios/' . $dados["fotoPerfilUsuario"])) {
+        if ($dados["fotoPerfilUsuario"] == "" || !file_exists('../../img/fotos-usuarios/' . $dados["fotoPerfilUsuario"])) {
             $nomeFoto = "SemFoto.jpg";
         } else {
             $nomeFoto = $dados["fotoPerfilUsuario"];
@@ -65,6 +65,8 @@
                     aria-valuemax="100">0%</div>
             </div>
         </div>
+        <a href="explicacao-2.php">Voltar</a>
+        <a href="criarPerfil-1.php">Próximo</a>
     </div>
     <script src="./js/jquery.js"></script>
     <script src="./js/jquery.form.js"></script>

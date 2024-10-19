@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div class="content">
+<div class="container">
     <h1>Termos e Condições</h1>
 
     <p>Bem-vindo ao [Nome do Site]! Estes Termos e Condições descrevem as regras e regulamentos para o uso do site localizado em [URL do Site].</p>

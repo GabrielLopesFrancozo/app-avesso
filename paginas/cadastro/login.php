@@ -1,36 +1,34 @@
 <?php
+
 include("../../db/conexao.php");
 
-if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
+if (isset($_POST["email"]) && isset($_POST["senha"])) {
     $emailUsuario = $_POST["email"];
-    $senhaUsuario = $_POST["senhaUsuario"];
+    $senhaUsuario = hash('sha256', $_POST["senha"]);
 
-    $sql = "SELECT nomeUsuario, emailUsuario, senhaUsuario FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
+    $sql = "SELECT idUsuario, nomeUsuario, emailUsuario, senhaUsuario, fotoPerfilUsuario FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
     $result = mysqli_query($conexao, $sql);
+
+    //Verifica se o usuário existe
     if (mysqli_num_rows($result) > 0) {
+
         $row = mysqli_fetch_assoc($result);
 
-        if($row["fotoPerfilUsuario"] == null){
+        if($row["fotoPerfilUsuario"] == "null"){
+            session_start();
+            $_SESSION["idUsuario"] = $row["idUsuario"];
+            header("Location: ../criarPerfil/criarPerfil-1.php");
+
+        } else {
             session_start();
             $_SESSION["emailUsuario"] = $emailUsuario;
             $_SESSION["senhaUsuario"] = $senhaUsuario;
             $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
             $_SESSION["idUsuario"] = $row["idUsuario"];
-            header("Location: ./cadastro2.php");
-        } else{
-            if ($emailUsuario == $row["emailUsuario"]) {
-                session_start();
-                $_SESSION["emailUsuario"] = $emailUsuario;
-                $_SESSION["senhaUsuario"] = $senhaUsuario;
-                $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
-                header("Location: ./../../index.php");
-            } else {
-                echo "Email, telefone ou senha incorretos";
-            }
+            header("Location: ./../../index.php");
         }
-
     } else {
-        echo "Email, telefone ou senha incorretos";
+        echo "Email ou senha incorretos";
     }
 }
 ?>
@@ -51,8 +49,8 @@ if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
         <label for="email">Email:</label>
         <input type="text" name="email" id="email" required>
         <br>
-        <label for="senhaUsuario">Senha:</label>
-        <input type="password" name="senhaUsuario" id="senhaUsuario" required>
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha" id="senha" required>
         <br>
         <input type="submit" value="Entrar">
     </form>
@@ -61,7 +59,7 @@ if (isset($_POST["email"]) && isset($_POST["senhaUsuario"])) {
 
     <button>Entrar com Google</button><br>
 
-    <label for="conta">Não tem uma conta?<a href="cadastro.php">Cadastre-se</a></label>
+    <label for="conta">Não possui uma conta?<a href="cadastro.php">Cadastre-se</a></label>
 </body>
 
 </html>
