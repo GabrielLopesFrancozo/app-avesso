@@ -24,7 +24,6 @@
 
 <body>
     <h1>Personalize sua conta</h1>
-    <p>Adicione uma foto para seu perfil</p>
     <h2><?= $dados["nomeUsuario"] ?></h2>
     <div class="col-12">
         <?php
@@ -66,8 +65,7 @@
                     aria-valuemax="100">0%</div>
             </div>
         </div>
-        <a href="explicacao-2.php">Voltar</a>
-        <a href="criarPerfil-2.php">Próximo</a>
+
     </div>
     <script src="../../js/jquery.js"></script>
     <script src="../../js/jquery.form.js"></script>

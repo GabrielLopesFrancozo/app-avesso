@@ -1,9 +1,9 @@
 <?php
 set_time_limit(0);
-include_once('../db/conexao.php');
+include_once('../../../db/conexao.php');
 
-$extensoes_validas = array(".jpg", ".png", ".bmp");
-$caminho_absoluto = "../img/fotos-usuarios/";
+$extensoes_validas = array(".jpg", ".png", ".bmp", ".jpeg");
+$caminho_absoluto = "../../../img/fotos-usuarios/";
 $tamanho_bytes = 5000000; // 5 MB
 
 // Verifica se o arquivo foi enviado corretamente
@@ -37,7 +37,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) 
         mysqli_query($conexao, $sql);
 
         if (mysqli_affected_rows($conexao) > 0) {
-            echo "./img/fotos-usuarios/{$nome_arquivo_novo};concluido";
+            echo "../../img/fotos-usuarios/{$nome_arquivo_novo};concluido";
         } else {
             die("Erro ao atualizar o banco de dados.;erro");
         }
