@@ -6,14 +6,22 @@ session_start();
 $idUsuario = $_SESSION["idUsuario"];
 if (isset($_POST["tituloHashtag"])) {
     $tituloHashtag = $_POST["tituloHashtag"];
-    $sql = "INSERT INTO tbhashtags (idUsuario, tituloHashtag) VALUES ($idUsuario, '$tituloHashtag')";
-    mysqli_query($conexao, $sql);
+    $sql = "SELECT * FROM tbhashtags WHERE idUsuario = $idUsuario AND tituloHashtag = '$tituloHashtag'";
+    $result = mysqli_query($conexao, $sql);
+    echo "1";
+    if (mysqli_num_rows($result) > 0) {
+        echo "<p>Hashtag já existe</p>";
+        echo "2";
+    } else {
+        echo "3";
+        $sql = "INSERT INTO tbhashtags (idUsuario, tituloHashtag) VALUES ($idUsuario, '$tituloHashtag')";
+        mysqli_query($conexao, $sql);
+    }
 }
 
-$sql = "SELECT * FROM tbusuarios LEFT JOIN tbhashtags ON tbusuarios.idUsuario = tbhashtags.idUsuario WHERE tbusuarios.idUsuario = $idUsuario";
+$sql = "SELECT * FROM tbusuarios WHERE idUsuario = $idUsuario";
 $result = mysqli_query($conexao, $sql);
 $dados = mysqli_fetch_assoc($result);
-
 
 ?>
 
@@ -47,10 +55,17 @@ $dados = mysqli_fetch_assoc($result);
 
         <div>
             <?php
+
             $sql = "SELECT * FROM tbhashtags WHERE idUsuario = $idUsuario";
             $result = mysqli_query($conexao, $sql);
-            while ($dados = mysqli_fetch_assoc($result)) {
-                echo "<p>" . $dados["tituloHashtag"] . "</p>";
+            $dados = mysqli_fetch_assoc($result);
+
+            if (mysqli_num_rows($result) == 0) {
+                echo "<p>Adicione pelo menos uma hashtag</p>";
+            } else {
+                while ($dados = mysqli_fetch_assoc($result)) {
+                    echo "<p>" . $dados["tituloHashtag"] . "</p>";
+                }
             }
             ?>
         </div>
