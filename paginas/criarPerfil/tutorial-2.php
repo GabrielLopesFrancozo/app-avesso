@@ -7,9 +7,8 @@
 </head>
 <body>
     <h3>Tenha conversas divertidas!</h3>
-    <label>Cada interação é a chance de boas risadas</label><br>
+    <label>Cada interação é a chance de boas risadas. Lembre-se sempre de manter o respeito com os outros!</label><br>
     <img width="500" src="../../img/imagens-app/Conversation.png" alt=""><br>
-    <a href="explicacao-1.php">Voltar</a>
-    <a href="criarPerfil-1.php">Próximo</a>
+    <a href="criarPerfil-1.php">Entendido</a>
 </body>
 </html>

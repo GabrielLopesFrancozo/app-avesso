@@ -4,42 +4,48 @@ include("../../db/conexao.php");
 
 session_start();
 
-// Verifica se o usuário enviou o formulário
-if (isset($_POST["nome-completo"]) && isset($_POST["email"]) && isset($_POST["senha"])) {
+// Verifica se o usuário realizou o envio do formulário
+if (isset($_POST["nomeCompleto"]) && isset($_POST["emailUsuario"]) && isset($_POST["senhaUsuario"]) && isset($_POST["dataNascUsuario"])) {
 
-    $nomeCompleto = $_POST["nome-completo"];
+    $nomeCompleto = $_POST["nomeCompleto"];
     $nomesIndividuais = explode(" ", $nomeCompleto);
 
     if (count($nomesIndividuais) > 1) {
-        $nome = $nomesIndividuais[0];
-        $sobrenome = implode(" ", array_slice($nomesIndividuais, 1));
+        $nomeUsuario = $nomesIndividuais[0];
+        $sobrenomeUsuario = implode(" ", array_slice($nomesIndividuais, 1));
     } else {
-        $nome = $nomeCompleto;
-        $sobrenome = "";
+        $nomeUsuario = $nomeCompleto;
+        $sobrenomeUsuario = "";
     }
 
-    $email = $_POST["email"];
-    $senha = hash('sha256', $_POST["senha"]);
+    $emailUsuario = $_POST["emailUsuario"];
+    $senhaUsuario = hash('sha256', $_POST["senhaUsuario"]);
+    $dataNascUsuario = $_POST["dataNascUsuario"];
 
-    $sql = "SELECT emailUsuario FROM tbusuarios WHERE emailUsuario = '$email'";
-    $result = mysqli_query($conexao, $sql);
+    // Procura se o usuário existe no banco de dados
+    $sql = "SELECT emailUsuario FROM tbusuarios WHERE emailUsuario = '$emailUsuario'";
+    $resultado = mysqli_query($conexao, $sql);
 
-    //Verifica se o usuário já tem cadastro
-    if (mysqli_num_rows($result) > 0) {
+    // Verifica se o usuário já possui cadastro
+    if (mysqli_num_rows($resultado) > 0) {
         echo "Usuário já cadastrado";
     } else {
+        // Insere o usuário no banco de dados
+        $sql = "INSERT INTO tbusuarios (nomeUsuario, sobrenomeUsuario, emailUsuario, senhaUsuario, dataNascUsuario) VALUES ('$nomeUsuario', '$sobrenomeUsuario', '$emailUsuario', '$senhaUsuario', '$dataNascUsuario')";
+        $resultado = mysqli_query($conexao, $sql);
 
-        $sql = "INSERT INTO tbusuarios (nomeUsuario, sobrenomeUsuario, emailUsuario, senhaUsuario) VALUES ('$nome', '$sobrenome', '$email', '$senha')";
-        $result = mysqli_query($conexao, $sql);
+        // Cria uma sessão para o usuário
+        $sql = "SELECT idUsuario, statusCadastro FROM tbusuarios WHERE emailUsuario = '$emailUsuario'";
+        $resultado = mysqli_query($conexao, $sql);
+        $dados = mysqli_fetch_assoc($resultado);
 
-        $sql = "SELECT idUsuario FROM tbusuarios WHERE emailUsuario = '$email' AND senhaUsuario = '$senha'";
-        $result = mysqli_query($conexao, $sql);
-        $row = mysqli_fetch_assoc($result);
+        $_SESSION["idUsuario"] = $dados["idUsuario"];
 
-        $_SESSION["idUsuario"] = $row["idUsuario"];
-
-        if ($result) {
-            header("Location: ../criarPerfil/explicacao-1.php");
+        if ($resultado) {
+            // Atualiza o status de cadastro para 1
+            $sql = "UPDATE tbusuarios SET statusCadastro = 1 WHERE idUsuario = $dados[idUsuario]";
+            $resultado = mysqli_query($conexao, $sql);
+            header("Location: ../criarPerfil/tutorial-1.php");
         } else {
             echo "Erro ao cadastrar";
         }
@@ -58,17 +64,25 @@ if (isset($_POST["nome-completo"]) && isset($_POST["email"]) && isset($_POST["se
 </head>
 
 <body>
-    <h1>Cadastro</h1>
-
     <form action="cadastro.php" method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
+        <img src="../../img/imagens-app/Logo.svg" alt="Avesso - Nome do app">
         <br>
-        <label for="nome-complet">Nome completo:</label>
-        <input type="text" name="nome-completo" id="nome-completo" required>
+        <spam>Cadastrar-se</spam>
         <br>
-        <label for="senha">Senha:</label>
-        <input type="password" name="senha" id="senha" required>
+        <label for="emailUsuario">Email:</label>
+        <input type="email" name="emailUsuario" id="emailUsuario" required>
+        <br>
+        <label for="nomeCompleto">Nome completo:</label>
+        <input type="text" name="nomeCompleto" id="nomeCompleto" required>
+        <br>
+        <label for="senhaUsuario">Senha:</label>
+        <input type="password" name="senhaUsuario" id="senhaUsuario" required>
+        <br>
+        <label for="dataNascUsuario">Data de nascimento:</label>
+        <input type="date" name="dataNascUsuario" id="dataNascUsuario" required>
+        <br>
+        <label for="localizacaoUsuario">Cidade:</label>
+        <input type="text" name="localizacaoUsuario" id="localizacaoUsuario">
         <br>
         <label for="termos">Ao continuar você concorda com nossos <a href="../termos.php">Termos e condições</a>:</label>
         <br>

@@ -2,31 +2,54 @@
 
 include("../../db/conexao.php");
 
-if (isset($_POST["email"]) && isset($_POST["senha"])) {
-    $emailUsuario = $_POST["email"];
-    $senhaUsuario = hash('sha256', $_POST["senha"]);
+if (isset($_POST["emailUsuario"]) && isset($_POST["senhaUsuario"])) {
+    $emailUsuario = $_POST["emailUsuario"];
+    $senhaUsuario = hash('sha256', $_POST["senhaUsuario"]);
 
-    $sql = "SELECT idUsuario, nomeUsuario, emailUsuario, senhaUsuario, fotoPerfilUsuario FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
+    $sql = "SELECT idUsuario, nomeUsuario, emailUsuario, senhaUsuario, fotoPerfilUsuario, statusCadastro FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
     $result = mysqli_query($conexao, $sql);
 
     //Verifica se o usuário existe
     if (mysqli_num_rows($result) > 0) {
 
-        $row = mysqli_fetch_assoc($result);
+        $dados = mysqli_fetch_assoc($result);
 
-        if($row["fotoPerfilUsuario"] == "null"){
-            session_start();
-            $_SESSION["idUsuario"] = $row["idUsuario"];
-            header("Location: ../criarPerfil/criarPerfil-1.php");
+        session_start();
+        $_SESSION["idUsuario"] = $dados["idUsuario"];
 
-        } else {
-            session_start();
-            $_SESSION["emailUsuario"] = $emailUsuario;
-            $_SESSION["senhaUsuario"] = $senhaUsuario;
-            $_SESSION["nomeUsuario"] = $row["nomeUsuario"];
-            $_SESSION["idUsuario"] = $row["idUsuario"];
-            header("Location: ./../../index.php");
+        switch ($dados["statusCadastro"]) {
+            case 0:
+                header("Location: ../criarPerfil/criarPerfil-1.php");
+                break;
+            
+            case 1:
+                header("Location: ../criarPerfil/criarPerfil-2.php");
+                break;
+            
+            case 2:
+                header("Location: ../criarPerfil/criarPerfil-3.php");
+                break;
+            
+            case 3:
+                header("Location: ../criarPerfil/criarPerfil-4.php");
+                break;
+            
+            default:
+                echo "<p>Lamentamos, ocorreu um erro inesperado :(</p>";
+                break;
         }
+
+        // if($dados["statusCadastro"] == 0){
+        //     header("Location: ./../../index.php");
+
+        // } else {
+        //     session_start();
+        //     $_SESSION["emailUsuario"] = $emailUsuario;
+        //     $_SESSION["senhaUsuario"] = $senhaUsuario;
+        //     $_SESSION["nomeUsuario"] = $dados["nomeUsuario"];
+        //     $_SESSION["idUsuario"] = $dados["idUsuario"];
+            
+        // }
     } else {
         echo "Email ou senha incorretos";
     }
@@ -34,7 +57,7 @@ if (isset($_POST["email"]) && isset($_POST["senha"])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -43,14 +66,16 @@ if (isset($_POST["email"]) && isset($_POST["senha"])) {
 </head>
 
 <body>
-    <h1>Login</h1>
-
     <form action="login.php" method="post">
-        <label for="email">Email:</label>
-        <input type="text" name="email" id="email" required>
+        <img src="../../img/imagens-app/Logo.svg" alt="Avesso - Nome do app">
         <br>
-        <label for="senha">Senha:</label>
-        <input type="password" name="senha" id="senha" required>
+        <spam>Entrar com login e senha</spam>
+        <br>
+        <label for="emailUsuario">Email:</label>
+        <input type="email" name="emailUsuario" id="emailUsuario" required>
+        <br>
+        <label for="senhaUsuario">Senha:</label>
+        <input type="password" name="senhaUsuario" id="senhaUsuario" required>
         <br>
         <input type="submit" value="Entrar">
     </form>
