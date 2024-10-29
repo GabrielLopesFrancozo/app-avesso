@@ -5,15 +5,15 @@ session_start();
 
 $idUsuario = $_SESSION["idUsuario"];
 if (isset($_POST["tituloHashtag"])) {
+
     $tituloHashtag = $_POST["tituloHashtag"];
     $sql = "SELECT * FROM tbhashtags WHERE idUsuario = $idUsuario AND tituloHashtag = '$tituloHashtag'";
     $result = mysqli_query($conexao, $sql);
-    echo "1";
+
     if (mysqli_num_rows($result) > 0) {
         echo "<p>Hashtag já existe</p>";
-        echo "2";
+
     } else {
-        echo "3";
         $sql = "INSERT INTO tbhashtags (idUsuario, tituloHashtag) VALUES ($idUsuario, '$tituloHashtag')";
         mysqli_query($conexao, $sql);
     }
@@ -38,54 +38,47 @@ $dados = mysqli_fetch_assoc($result);
 </head>
 
 <body>
-    <h1>Personalize sua conta</h1>
-    <p>Adicione algumas hashtags de coisas que você gosta</p>
-    <h2><?= $dados["nomeUsuario"] ?></h2>
-    <div class="col-12">
-        <?php
-        if ($dados["fotoPerfilUsuario"] == "" || !file_exists('../../img/fotos-usuarios/' . $dados["fotoPerfilUsuario"])) {
-            $nomeFoto = "SemFoto.jpg";
-        } else {
-            $nomeFoto = $dados["fotoPerfilUsuario"];
-        }
-        ?>
-        <div class="mb-3">
-            <img id="foto-usuario" class="img-fluid img-thumbnail" width="200" src="../../img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do Usuário">
-        </div>
+    <div class="progresso" style="border: 1px solid black;">
+        <p><?php echo $dados["statusCadastro"] ?></p>
+    </div>
 
-        <div>
-            <?php
+    <div class="principal" style="width: 100%;">
+        <h1>Customizando perfil</h1>
 
-            $sql = "SELECT * FROM tbhashtags WHERE idUsuario = $idUsuario";
-            $result = mysqli_query($conexao, $sql);
-            $dados = mysqli_fetch_assoc($result);
+        <div class="previzualizacao">
+            <img src="../../img/fotos-usuarios/<?= $dados["fotoPerfilUsuario"] ?>" style="width: 100px; height: 100px; object-fit: cover;" alt="Foto do Usuário">
+            <p id="bioUsuario"> <?= $dados["bioUsuario"] ?></p>
+            <div class="hashtags" style="display: flex; flex-direction: row;">
+                <?php
+                $sql = "SELECT * FROM tbhashtags WHERE idUsuario = $idUsuario";
+                $result = mysqli_query($conexao, $sql);
 
-            if (mysqli_num_rows($result) == 0) {
-                echo "<p>Adicione pelo menos uma hashtag</p>";
-            } else {
                 while ($dados = mysqli_fetch_assoc($result)) {
-                    echo "<p>" . $dados["tituloHashtag"] . "</p>";
+                    echo "<p style='margin-right: 10px; border: 1px solid black; padding: 5px; border-radius: 150px;'>#" . htmlspecialchars($dados["tituloHashtag"]) . "</p>";
                 }
-            }
-            ?>
+
+                ?>
+            </div>
         </div>
 
-        <div>
-            <form action="" method="post">
-                <input type="text" name="tituloHashtag" id="tituloHashtag">
-                <button type="submit">+</button>
-            </form>
+        <div class="adicionarInfoContainer" style="border: 1px solid black;">
+            <p>Adicione algumas hashtags</p>
+            <div class="bio">
+                <form method="post">
+                    <input id="tituloHashtag" name="tituloHashtag" type="text" required>
+                    <button type="submit">Ok</button>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <a href="criarPerfil-1.php">Voltar</a>
+    <div class="inferior">
+        <a href="criarPerfil-2.php">Voltar</a>
         <a href="criarPerfil-3.php">Próximo</a>
     </div>
-    <script src="../../js/jquery.js"></script>
-    <script src="../../js/jquery.form.js"></script>
-    <script src="../../js/upload.js"></script>
+
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-    <script src="../../js/validation.js"></script>
 </body>
 
 </html>

@@ -37,9 +37,9 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) 
         mysqli_query($conexao, $sql);
 
         if (mysqli_affected_rows($conexao) > 0) {
-            echo "../../img/fotos-usuarios/{$nome_arquivo_novo};concluido";
-        } else {
             die("Erro ao atualizar o banco de dados.;erro");
+        } else {
+            echo "../../img/fotos-usuarios/{$nome_arquivo_novo};concluido";
         }
     } else {
         die("O arquivo não pode ser copiado para o servidor.;erro");

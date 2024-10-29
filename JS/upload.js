@@ -1,44 +1,46 @@
-$(document).ready(function(){
-    var mensagem = $("#mensagem");
-    var preloader = $("#preloader");
-    var barra = $("#barra");
-    $("#editar-foto").hide();
-    mensagem.hide();
-    preloader.hide();
-    
-    $("#btn-editar-foto").on('click',function(){
-        $("#editar-foto").toggle();
-    });
-    
-    $("#btn-enviar-foto").on('click',function(event){
-        event.preventDefault();
-        $("#form-upload-foto").ajaxForm({
-            url:'./upload/executa-upload.php',
-            uploadProgress:function(event,position, total, precentComplete){
-              preloader.show();
-              barra.width(precentComplete + '%');  
-              barra.html(precentComplete + '%');  
-            },
-            success:function(data){
-                var msg = data.substring(0,data.indexOf(';'));
-                var tipoMsg = data.substring(data.indexOf(';')+1);
+$(document).ready(function () {
+    var $message = $("#mensagem");
+    $message.hide();
 
-                if(tipoMsg == "concluido"){
-                    var caminho_foto = msg;
-                    msg = "Upload da foto realizado com sucesso!";
-                    $("#foto-usuario").attr("src",caminho_foto+"?timestamp="+ new Date().getTime());
-                    mensagem.show().attr("class","mb-3 alert alert-success").html(msg);
-                }else if(tipoMsg == "aviso"){
-                    mensagem.show().attr("class","mb-3 alert alert-warning").html(msg);
-                    preloader.hide();
-                }else{
-                    mensagem.show().attr("class","mb-3 alert alert-danger").html(msg);
-                    preloader.hide();
+    $("#btn-enviar-foto").on("click", function (event) {
+        event.preventDefault();
+
+        $("#form-upload-foto").ajaxForm({
+            url: './upload/executa-upload.php',
+            success: function (data) {
+                var message = data.substring(0, data.indexOf(';'));
+                var messageType = data.substring(data.indexOf(';') + 1);
+
+                if (messageType === "concluido") {
+                    var photoPath = message;
+                    message = "Foto carregada com sucesso!";
+                    $("#foto-usuario").attr("src", photoPath + "?timestamp=" + new Date().getTime());
+                    $message.show().attr("class", "mb-3 alert alert-success").html(message);
+
+                } else if (messageType === "aviso") {
+                    message = "A imagem ultrapassa o tamanho permitido.";
+                    $message.show().attr("class", "mb-3 alert alert-warning").html(message);
+
+                } else {
+                    message = "Nenhuma foto selecionada.";
+                    $message.show().attr("class", "mb-3 alert alert-danger").html(message);
                 }
+
+                $('input[type="file"]').val('');
+
+                setTimeout(function () {
+                    $message.fadeOut();
+                }, 2500);
             },
-            error:function(data){
-                console.log(data);
+            error: function (error) {
+                console.error("Upload error:", error);
             }
         }).submit();
-    })
+    });
+
+    // // Captura o evento de digitação no input
+    // $("#bioUsuarioInput").on("input", function () {
+    //     // Atualiza o conteúdo do parágrafo com o texto do input
+    //     $("#bioUsuario").text($(this).val());
+    // });
 });

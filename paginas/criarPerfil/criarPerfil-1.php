@@ -23,70 +23,53 @@ $dados = mysqli_fetch_assoc($resultado);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 
-<body style="display: flex; flex-direction: column; gap: 10px;">
-
+<body>
     <div class="progresso" style="border: 1px solid black;">
-        <spam><?php echo $dados["statusCadastro"] ?></spam>
+        <p><?php echo $dados["statusCadastro"] ?></p>
     </div>
 
     <div class="principal" style="width: 100%;">
         <h1>Customizando perfil</h1>
-        <div class="conteudoPrincipal" style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
-            <div class="previsualizacao" style="border: 1px solid black; width: 18rem; display: flex; flex-direction: column; justify-content: start; align-items: center;">
-                <div class="fotoUsuario">
-                    <?php
-                    if ($dados["fotoPerfilUsuario"] == "" || !file_exists('../../img/fotos-usuarios/' . $dados["fotoPerfilUsuario"])) {
-                        $nomeFoto = "SemFoto.jpg";
-                    } else {
-                        $nomeFoto = $dados["fotoPerfilUsuario"];
+
+        <div class="adicionarInfoContainer" style="border: 1px solid black;">
+            <p>Adicione uma foto para seu perfil</p>
+
+            <div class="fotoPerfil" style="width: 200px; height: 200px; display: flex; justify-content: center; align-items: center;">
+                <?php
+                if ($dados["fotoPerfilUsuario"] == "" || !file_exists('../../img/fotos-usuarios/' . $dados["fotoPerfilUsuario"])) {
+                    $nomeFoto = "SemFoto.jpg";
+                } else {
+                    $nomeFoto = $dados["fotoPerfilUsuario"];
+
+                    $sql = "UPDATE tbusuarios SET statusCadastro = 2 WHERE idUsuario = $idUsuario";
+                    $resultado = mysqli_query($conexao, $sql);
+
+                    if ($resultado) {
+                        // header("Location: ../criarPerfil/criarperfil-2.php");
                     }
-                    ?>
-                    <img src="../../img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do usuário" width="100">
-                </div>
-                <p><?= $dados["nomeUsuario"] . " " . $dados["sobrenomeUsuario"] ?></p>
+                }
+                ?>
+                <img id="foto-usuario" src="../../img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do usuário" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
-            <div class="adicionarFoto" style="border: 1px solid black; width: 100%;">
-                <p>Adicione uma foto para seu perfil</p>
-                <div class="col-12">
-                    <div class="mb-3" style="width: 200px; height: 200px; border-radius: 50%; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                        <img id="foto-usuario" src="../../img/fotos-usuarios/<?= $nomeFoto ?>" alt="Foto do usuário" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
 
-                    <div class="mb-3">
-                        <button class="btn btn-primary" id="btn-editar-foto">
-                            <i class="bi bi-camera"></i> Editar Foto
-                        </button>
+            <div id="editar-foto">
+                <form id="form-upload-foto" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
+                    <label class="form-label" for="arquivo">Selecione um arquivo de imagem da foto</label>
+                    <div>
+                        <input id="arquivo" type="file" name="arquivo">
+                        <input id="btn-enviar-foto" type="submit" value="Enviar">
                     </div>
-                    <div id="editar-foto">
-                        <form id="form-upload-foto" class="mb-3" method="post">
-                            <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
-                            <label class="form-label" for="arquivo">Selecione um arquivo de imagem da foto</label>
-                            <div class="input-group">
-                                <input class="form-control" type="file" name="arquivo" id="arquivo">
-                                <input id="btn-enviar-foto" class="btn btn-secondary" type="submit" value="Enviar">
-                            </div>
-                        </form>
+                </form>
 
-                        <div id="mensagem" class="mb-3 alert alert-success">
+                <div id="mensagem" class="mb-3 alert alert-success"></div>
 
-                        </div>
-                        <div id="preloader" class="progress">
-                            <div id="barra"
-                                class="progress-bar bg-danger"
-                                role="progressbar"
-                                style="width: 0%"
-                                aria-valuenow="0"
-                                aria-valuemin="0"
-                                aria-valuemax="100">0%</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
     <div class="inferior">
-        <a href="criarPerfil-2.php"><?= isset($_POST["arquivo"])?"Próximo":"Pular" ?></a>
+        <a href="criarPerfil-2.php"><?= $dados["fotoPerfilUsuario"] != "SemFoto.jpg" ? "Próximo" : "Pular" ?></a>
     </div>
 
     <script src="../../js/jquery.js"></script>
