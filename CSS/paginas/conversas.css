@@ -1,0 +1,22 @@
+.contatos {
+    width: 20rem;
+    height: 100%;
+}
+
+.titulo {
+    width: 100%;
+    height: 4rem;
+}
+
+.pesquisar {
+    width: 100%;
+    height: 2rem;
+}
+
+.filtros {
+    width: 100%;
+    height: 2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

@@ -2,11 +2,13 @@
 
 include("../../db/conexao.php");
 
+
 if (isset($_POST["emailUsuario"]) && isset($_POST["senhaUsuario"])) {
+
     $emailUsuario = $_POST["emailUsuario"];
     $senhaUsuario = hash('sha256', $_POST["senhaUsuario"]);
 
-    $sql = "SELECT idUsuario, nomeUsuario, emailUsuario, senhaUsuario, fotoPerfilUsuario, statusCadastro FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
+    $sql = "SELECT idUsuario, statusCadastro FROM tbusuarios WHERE emailUsuario = '$emailUsuario' AND senhaUsuario = '$senhaUsuario'";
     $result = mysqli_query($conexao, $sql);
 
     //Verifica se o usuário existe
@@ -17,41 +19,22 @@ if (isset($_POST["emailUsuario"]) && isset($_POST["senhaUsuario"])) {
         session_start();
         $_SESSION["idUsuario"] = $dados["idUsuario"];
 
-        switch ($dados["statusCadastro"]) {
-            case 0:
-                header("Location: ../criarPerfil/criarPerfil-1.php");
-                break;
-            
-            case 1:
-                header("Location: ../criarPerfil/criarPerfil-2.php");
-                break;
-            
-            case 2:
-                header("Location: ../criarPerfil/criarPerfil-3.php");
-                break;
-            
-            case 3:
-                header("Location: ../criarPerfil/criarPerfil-4.php");
-                break;
-            
-            default:
-                echo "<p>Lamentamos, ocorreu um erro inesperado :(</p>";
-                break;
+        if ($dados["statusCadastro"] < 5) {
+            header("Location: ../criarPerfil/criarPerfil-{$dados['statusCadastro']}.php");
+        } else {
+            header("Location: ../../index.php");
         }
 
-        // if($dados["statusCadastro"] == 0){
-        //     header("Location: ./../../index.php");
-
-        // } else {
-        //     session_start();
-        //     $_SESSION["emailUsuario"] = $emailUsuario;
-        //     $_SESSION["senhaUsuario"] = $senhaUsuario;
-        //     $_SESSION["nomeUsuario"] = $dados["nomeUsuario"];
-        //     $_SESSION["idUsuario"] = $dados["idUsuario"];
-            
-        // }
     } else {
-        echo "Email ou senha incorretos";
+        echo "
+        <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+        <script>
+            $(document).ready(function() {
+                // Mostra o aviso
+                $('.error').show();
+            });
+        </script>
+        ";
     }
 }
 ?>
@@ -63,28 +46,39 @@ if (isset($_POST["emailUsuario"]) && isset($_POST["senhaUsuario"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Avesso</title>
+    <link rel="shortcut icon" type="image/svg" href="../../img/imagens-app/favicon.ico" />
+    <link rel="stylesheet" href="../../css/paginas/cadastro.css">
 </head>
 
 <body>
-    <form action="login.php" method="post">
-        <img src="../../img/imagens-app/Logo.svg" alt="Avesso - Nome do app">
-        <br>
-        <spam>Entrar com login e senha</spam>
-        <br>
-        <label for="emailUsuario">Email:</label>
-        <input type="email" name="emailUsuario" id="emailUsuario" required>
-        <br>
-        <label for="senhaUsuario">Senha:</label>
-        <input type="password" name="senhaUsuario" id="senhaUsuario" required>
-        <br>
-        <input type="submit" value="Entrar">
-    </form>
+    <div class="card-login">
+        <img id="logo" src="../../img/imagens-app/Logo-texto.svg" width="200" alt="Avesso - Logo do app">
 
-    <label for="ou">- Ou -</label><br>
+        <div class="divisor"></div>
 
-    <button>Entrar com Google</button><br>
+        <form action="login.php" method="post">
+            <span>Entrar com login e senha</span>
 
-    <label for="conta">Não possui uma conta?<a href="cadastro.php">Cadastre-se</a></label>
+            <div class="area-input">
+                <input id="emailUsuario" name="emailUsuario" type="email" placeholder="Email" value="usuario@example.com" required>
+                <input id="senhaUsuario" name="senhaUsuario" type="password" placeholder="Senha" value="1234" required>
+            </div>
+
+            <div class="error" style="display: none;">
+                <span>Email ou senha incorretos!</span>
+            </div>
+
+            <input type="submit" value="Entrar">
+        </form>
+
+        <div class="divisor-ou">
+            <div class="divisor"></div> Ou <div class="divisor"></div>
+        </div>
+
+        <button>Entrar com Google</button>
+
+        <span>Não possui uma conta?<a href="cadastro.php">Cadastre-se</a></span>
+    </div>
 </body>
 
 </html>

@@ -1,67 +1,85 @@
+@import url("./variaveis.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-  }
-  
-  main, .container-fluid {
-    flex: 1;
-  }
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
 
-  .col{
-    height: 100vh;
-  }
+.sidebar {
+  width: 12rem;
+  height: 100vh;
+  background-color: var(--ice);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .navbar {
-    padding: 0;
-  }
-  
-  .navbar-nav {
-    flex-direction: row;
-  }
-  
-  .nav-link {
-    padding: 10px;
-    font-size: 14px;
-  }
+.navbar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
 
-  #main {
-    width: 500px;
-    height: 500px;
-    position: relative;
-    overflow: hidden;
+.nav-bottom {
+  height: 100%;
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.divisor {
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}
+
+#main {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
 }
 
 #main img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 /* Aplica blur na imagem de fundo */
 .blur {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px);
-    z-index: 2;
-    mask-image: radial-gradient(circle at 0 0, transparent 50px, black 50px); /* Configuração inicial */
-    mask-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  z-index: 2;
+  mask-image: radial-gradient(circle at 0 0, transparent 50px, black 50px);
+  /* Configuração inicial */
+  mask-repeat: no-repeat;
 }
 
 #seguidor {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: absolute;
-    pointer-events: none;
-    z-index: 3; /* Fica acima do blur */
-    backdrop-filter: blur(0.12rem);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  /* Fica acima do blur */
+  backdrop-filter: blur(0.12rem);
 }
